@@ -1,0 +1,11 @@
+node_modules/
+dist/
+# guia do template (licença Profitize: não publicar o prompt)
+CLAUDE.md
+AGENTS.md
+PROMPT.md
+arquivos/
+.claude/
+*.log
+.DS_Store
+Thumbs.db
