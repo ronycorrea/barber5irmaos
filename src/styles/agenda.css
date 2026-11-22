@@ -48,6 +48,7 @@
 .opcao__avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; overflow: hidden; background: #1a1a1a; color: var(--cinza-1); }
 .opcao__avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 30%; transform: scale(2.2); transform-origin: 62% 30%; }
 .opcao__avatar svg { width: 22px; height: 22px; }
+.opcao__avatar b { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--branco); }
 .opcao__seta { color: var(--cinza-2); transition: transform 0.35s var(--curva), color 0.25s; }
 @media (hover: hover) { .opcao:hover .opcao__seta { transform: translateX(4px); color: var(--branco); } }
 .carregando { display: grid; place-items: center; padding: 60px 0; }

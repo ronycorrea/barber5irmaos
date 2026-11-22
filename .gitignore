@@ -9,3 +9,13 @@ arquivos/
 *.log
 .DS_Store
 Thumbs.db
+
+# segredos
+.env
+.env.local
+.env.*.local
+.vercel
+
+.vercel
+.env*
+!.env.example
