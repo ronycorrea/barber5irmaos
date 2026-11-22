@@ -16,7 +16,7 @@ export const ANTECEDENCIA_MIN = 20;
 export const MAX_POR_CLIENTE = 2;
 
 // Endereço do site (vai no aviso de cancelamento que o barbeiro manda ao cliente, para ele remarcar).
-export const SITE_URL = 'https://barbearia5irmaos.vercel.app';
+export const SITE_URL = 'https://barber5irmaos.vercel.app';
 
 // Barbeiros. `id`: curto, sem espaço e sem acento, e nunca muda depois de entrar no ar (fica gravado nos agendamentos).
 // `telegramChatId`: o ID do Telegram do barbeiro. Para descobrir: o barbeiro abre o bot no Telegram, manda /start
@@ -28,7 +28,7 @@ export const BARBEIROS = [
     id: 'barbeiro1',
     nome: 'Barbeiro 1', // ⚠ trocar pelo nome real
     extra: 'seg a sex · 9h às 18h',
-    telegramChatId: '', // ⚠ colar aqui o ID que o bot mostrar no /start
+    telegramChatId: '7329569399', // ⚠ ID de teste (Telegram do dono)
     expediente: {
       1: [['09:00', '12:00'], ['13:00', '18:00']],
       2: [['09:00', '12:00'], ['13:00', '18:00']],
@@ -41,7 +41,7 @@ export const BARBEIROS = [
     id: 'barbeiro2',
     nome: 'Barbeiro 2', // ⚠ trocar pelo nome real
     extra: 'ter a sáb · 12h às 21h',
-    telegramChatId: '', // no teste, o mesmo ID do Barbeiro 1
+    telegramChatId: '7329569399', // no teste, o mesmo ID do Barbeiro 1
     expediente: {
       2: [['12:00', '21:00']],
       3: [['12:00', '21:00']],
