@@ -13,7 +13,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { estudio } from '../gl/estudio.js';
-import { CELULAR } from '../motion/ease.js';
+import { CELULAR, GL_LEVE, pixelGL, aoRedimensionar } from '../motion/ease.js';
 
 const FATOS = [
   { grande: '24 h', legenda: 'agenda aberta no site, a qualquer hora' },
@@ -201,9 +201,9 @@ export function manifesto() {
     camera.fov = cel() ? 46 : 30;
     camera.position.z = cel() ? 9.5 : 11;
     camera.updateProjectionMatrix();
-    for (const p of palcos) { p.renderer.setPixelRatio(Math.min(devicePixelRatio, cel() ? 1.6 : 2)); p.renderer.setSize(w, h, false); }
+    for (const p of palcos) { p.renderer.setPixelRatio(pixelGL()); p.renderer.setSize(w, h, false); }
   }
-  addEventListener('resize', mede);
+  aoRedimensionar(mede);
   mede();
   new IntersectionObserver(([e]) => { visivel = e.isIntersecting; }, { rootMargin: '20% 0px' }).observe(fixo);
   poe(0);
@@ -211,7 +211,7 @@ export function manifesto() {
 
 /* ---------------- um palco (um canvas, uma cena, as três peças) ---------------- */
 function palco(canvas) {
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !GL_LEVE, powerPreference: 'high-performance' });
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;

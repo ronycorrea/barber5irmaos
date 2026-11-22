@@ -6,14 +6,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { estudio, bolinha } from './estudio.js';
-import { CELULAR, clamp, lerp } from '../motion/ease.js';
+import { CELULAR, GL_LEVE, pixelGL, aoRedimensionar, clamp, lerp } from '../motion/ease.js';
 
 // couro da cadeira por tema (?tema=preto | vinho | conhaque); o resto da página não muda
 export const COUROS = { preto: 0x060606, vinho: 0x3a0608, conhaque: 0x45200d };
 const ALTURA = 1.95; // a cadeira normalizada: do chão ao topo do apoio de cabeça
 
 export function criarCadeira(canvas, { tema = 'preto', modelo = 'modelos/cadeira.glb' } = {}) {
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !GL_LEVE, powerPreference: 'high-performance' });
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -104,7 +104,7 @@ export function criarCadeira(canvas, { tema = 'preto', modelo = 'modelos/cadeira
   palco.add(poeira);
 
   // ---- materiais ----
-  const couro = new THREE.MeshPhysicalMaterial({ color: COUROS[tema] ?? COUROS.preto, roughness: 0.42, metalness: 0, clearcoat: 0.85, clearcoatRoughness: 0.2, sheen: 0.18, sheenRoughness: 0.5, sheenColor: new THREE.Color(0x3a3a3a) });
+  const couro = new THREE.MeshPhysicalMaterial({ color: COUROS[tema] ?? COUROS.preto, roughness: 0.42, metalness: 0, clearcoat: 0.85, clearcoatRoughness: 0.2, sheen: GL_LEVE ? 0 : 0.18, sheenRoughness: 0.5, sheenColor: new THREE.Color(0x3a3a3a) });
   const cromo = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.1 });
   const borracha = new THREE.MeshPhysicalMaterial({ color: 0x080808, metalness: 0, roughness: 0.38, clearcoat: 0.5, clearcoatRoughness: 0.3 });
 
@@ -180,11 +180,11 @@ export function criarCadeira(canvas, { tema = 'preto', modelo = 'modelos/cadeira
   const alvo = new THREE.Vector3();
   function redimensiona() {
     w = canvas.clientWidth || innerWidth; h = canvas.clientHeight || innerHeight;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, CELULAR() ? 1.6 : 2));
+    renderer.setPixelRatio(pixelGL());
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    poeira.material.uniforms.uEscala.value = h / 900 * Math.min(devicePixelRatio, 2);
+    poeira.material.uniforms.uEscala.value = h / 900 * pixelGL();
     e.x = CELULAR() ? 0.5 : 0.455;
     precisa = true;
   }
@@ -262,7 +262,7 @@ export function criarCadeira(canvas, { tema = 'preto', modelo = 'modelos/cadeira
   function liga() { if (!rodando) { rodando = true; t0 = performance.now(); requestAnimationFrame(laco); } }
 
   new IntersectionObserver(([en]) => { visivel = en.isIntersecting; if (visivel) liga(); }, { rootMargin: '10% 0px' }).observe(canvas);
-  addEventListener('resize', redimensiona);
+  aoRedimensionar(redimensiona);
   redimensiona();
   liga();
 

@@ -11,6 +11,20 @@ CustomEase.create('pf-io', '0.76, 0, 0.24, 1');
 export const REDUZIDO = matchMedia('(prefers-reduced-motion: reduce)').matches;
 export const TOQUE = matchMedia('(hover: none)').matches;
 export const CELULAR = () => innerWidth <= 760;
+// 3D no celular: sem antialias (o mais caro da placa de vídeo) e resolução menor; no computador, como antes
+export const GL_LEVE = TOQUE || innerWidth <= 760;
+export const pixelGL = () => Math.min(devicePixelRatio, GL_LEVE ? 1.25 : 2);
+// no celular, a barra de endereço some e volta ao rolar e dispara "resize" só na altura: recriar o 3D a cada vez trava.
+// Só refaz quando a largura muda (girar o aparelho) ou, no computador, sempre.
+export function aoRedimensionar(fn) {
+  let largura = innerWidth, altura = innerHeight;
+  addEventListener('resize', () => {
+    const mudouLargura = innerWidth !== largura;
+    if (TOQUE && !mudouLargura && Math.abs(innerHeight - altura) < 160) return;
+    largura = innerWidth; altura = innerHeight;
+    fn();
+  });
+}
 
 // a altura das cenas presas é 100svh (a tela com as barras do navegador abertas): medir pelo innerHeight mudaria o
 // tamanho das peças quando a barra do Safari some no meio da rolagem

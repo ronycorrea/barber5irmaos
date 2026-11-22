@@ -236,7 +236,7 @@
     <!-- Seções da demo desligadas até a barbearia ter os dados (planos, produtos, vale-presente, avaliações do Google).
          Para religar, copie a seção do arquivos/index.html, troque os textos e os preços, e volte os links da nav. -->
 
-    <!-- #3 ONDE FICA: endereço, horário (hoje marcado) e o mapa desenhado -->
+    <!-- #3 ONDE FICA: endereço, horário (hoje marcado) e o mapa do Google -->
     <section class="endereco secao secao--escura" id="endereco" aria-labelledby="endereco-titulo">
       <div class="secao__miolo endereco__miolo">
         <div class="endereco__texto">
@@ -251,20 +251,10 @@
           <p class="adesivo mono">Agende online · pague na cadeira</p>
         </div>
         <figure class="mapa">
-          <a class="mapa__link" href="https://maps.app.goo.gl/nS1yFnoue2X9XLkD6" target="_blank" rel="noopener" aria-label="Abrir a localização da Barbearia 5 Irmãos no Google Maps">
-          <svg class="mapa__svg" viewBox="0 0 600 520" role="img" aria-label="Mapa ilustrativo até a Barbearia 5 Irmãos">
-            <g class="mapa__ruas" fill="none" stroke-linecap="round">
-              <path d="M-40 150 L640 -60"/><path d="M-40 380 L640 170"/><path d="M-40 610 L640 400"/>
-              <path d="M60 -40 L380 560"/><path d="M300 -40 L620 560"/><path d="M-120 60 L200 660"/>
-              <path class="fina" d="M-40 265 L640 55"/><path class="fina" d="M-40 495 L640 285"/>
-            </g>
-            <!-- nomes das ruas: [preencher] com as ruas de verdade, se quiser -->
-            <path class="mapa__rota" d="M150 372 L262 337 L335 314 L372 304" fill="none"/>
-            <g class="mapa__metro"><circle cx="150" cy="372" r="11"/><text class="mono" x="128" y="410">Você</text></g>
-            <g class="mapa__nos"><circle class="mapa__pulso" cx="452" cy="280" r="26"/><circle cx="452" cy="280" r="26"/><text class="mono" x="414" y="336">5 Irmãos</text></g>
-          </svg>
-          </a>
-          <figcaption class="mono">Mapa ilustrativo · toque para abrir no Google Maps</figcaption>
+          <!-- mapa de verdade (Google Maps, sem chave de API); só carrega quando a seção chega perto da tela -->
+          <iframe class="mapa__frame" title="Mapa: Barbearia 5 Irmãos, Santa Efigênia, Coari - AM" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+            src="https://maps.google.com/maps?q=-4.095938,-63.142563&amp;z=17&amp;hl=pt-BR&amp;output=embed"></iframe>
+          <figcaption class="mono"><a href="https://maps.app.goo.gl/nS1yFnoue2X9XLkD6" target="_blank" rel="noopener">Abrir no Google Maps ↗</a></figcaption>
         </figure>
       </div>
     </section>
@@ -296,7 +286,7 @@
     <p class="rodape__nome" aria-hidden="true"><span>cinco</span> <span>irmãos</span></p>
     <div class="rodape__pe">
       <nav class="rodape__links" aria-label="Rodapé">
-        <a href="#cardapio">Serviços</a><a href="#cortes">Cortes</a><a href="#endereco">Endereço</a><a href="#topo">Instagram [preencher]</a>
+        <a href="#cardapio">Serviços</a><a href="#cortes">Cortes</a><a href="#endereco">Endereço</a>
       </nav>
       <p class="rodape__nota mono">Barbearia 5 Irmãos · Barba, cabelo e atitude · Cadeira 3D: “Barber Chair”, de sweedboy69 (CC BY 4.0)</p>
     </div>

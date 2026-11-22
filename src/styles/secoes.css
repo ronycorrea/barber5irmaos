@@ -249,9 +249,10 @@
 .horario div.is-hoje dt::after { content: ' · hoje'; }
 .adesivo { display: inline-block; margin-top: calc(38 * var(--su)); padding: 10px 16px; border-radius: 6px; border: 1px dashed rgb(255 255 255 / 0.32); background: #141414; color: #e2e1de; font-weight: 700; transform: rotate(-4deg); box-shadow: 0 10px 20px -12px #000; }
 .mapa { margin: 0; }
-.mapa__link { display: block; border-radius: calc(24 * var(--su)); transition: transform 0.5s var(--curva); }
-@media (hover: hover) { .mapa__link:hover { transform: scale(1.01); } }
-.mapa__link:focus-visible { outline: 2px solid var(--branco); outline-offset: 4px; }
+/* o mapa do Google no tom escuro do site: invertido e com a cor girada de volta (o alfinete continua vermelho) */
+.mapa__frame { display: block; width: 100%; aspect-ratio: 600 / 520; border: 0; border-radius: calc(24 * var(--su)); background: #0e0e0e; filter: invert(0.9) hue-rotate(180deg) saturate(0.55) contrast(0.95); }
+.mapa figcaption a { color: var(--cinza-1); text-decoration: underline; text-underline-offset: 3px; transition: color 0.25s; }
+@media (hover: hover) { .mapa figcaption a:hover { color: var(--branco); } }
 .endereco__plus { font-size: 13px; letter-spacing: 0.08em; color: var(--cinza-2); }
 .mapa__svg { width: 100%; height: auto; border-radius: calc(24 * var(--su)); background: #0e0e0e; overflow: hidden; }
 .mapa__ruas path { stroke: #1d1d1d; stroke-width: 26; }
@@ -337,8 +338,9 @@
   .espelho__nome { font-size: 22px; }
   .espelho__extra { white-space: normal; font-size: 11px; }
   .cortes__grade { grid-template-columns: 1fr 1fr; gap: 26px 10px; }
-  .corte__pe h3 { font-size: 14px; }
-  .corte__preco { font-size: 14px; }
+  .corte__pe { grid-template-columns: 1fr; gap: 4px; }
+  .corte__pe h3 { font-size: 15px; }
+  .corte__preco { font-size: 13px; color: var(--cinza-1); }
   .corte__dica { font-size: 11px; left: 8px; top: 8px; padding: 5px 9px; }
   .filtros { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * var(--lado)); padding-inline: var(--lado); scrollbar-width: none; }
   .clube__leque { grid-template-columns: 1fr; gap: 14px; }

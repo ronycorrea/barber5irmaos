@@ -283,18 +283,13 @@ function avaliacoes() {
   arruma(false);
 }
 
-/* ---------- #6 endereço: hoje marcado e o caminho do metrô desenhado ---------- */
+/* ---------- #6 endereço: o dia de hoje marcado no horário ---------- */
 function endereco() {
   const hoje = new Date().getDay();
   for (const d of document.querySelectorAll('.horario [data-dias]')) {
     const [a, b = a] = d.dataset.dias.split('-').map(Number);
     d.classList.toggle('is-hoje', hoje >= a && hoje <= b);
   }
-  const rota = document.querySelector('.mapa__rota');
-  rota.setAttribute('pathLength', '1');
-  if (REDUZIDO) { rota.style.strokeDashoffset = '0'; return; }
-  gsap.to(rota, { strokeDashoffset: 0, duration: 1.8, ease: 'pf-io', scrollTrigger: { trigger: '.mapa', start: 'top 70%' } });
-  gsap.from('.mapa__nos', { scale: 0, svgOrigin: '452 280', duration: 0.9, ease: 'back.out(2)', delay: 1.2, scrollTrigger: { trigger: '.mapa', start: 'top 70%' } });
 }
 
 /* ---------- dúvidas: acordeão com altura animada (um aberto por vez) ---------- */

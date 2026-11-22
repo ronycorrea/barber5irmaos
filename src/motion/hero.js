@@ -46,7 +46,7 @@ export function heroRolando({ cena, aoClarear }) {
   const st = ScrollTrigger.create({
     trigger: secao,
     start: 'top top',
-    end: () => `+=${Math.round(innerHeight * (CELULAR() ? 1.2 : 1.35))}`,
+    end: () => `+=${Math.round(innerHeight * (CELULAR() ? 0.75 : 1.35))}`,
     pin: true,
     pinSpacing: true,
     refreshPriority: 1,

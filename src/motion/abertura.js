@@ -70,7 +70,7 @@ export function abertura({ lenis, cena, aoTerminar }) {
     document.fonts.load('800 100px "Unbounded Variable"'),
   ]).catch(() => {});
   const tempo = (ms) => new Promise((ok) => setTimeout(ok, ms));
-  Promise.race([Promise.all([fontes, img(getComputedStyle(cabelo).backgroundImage.slice(5, -2) || `${import.meta.env.BASE_URL}img/cabelo.webp`), img(pente.src)]), tempo(2500)]).then(comecar);
+  Promise.race([Promise.all([fontes, img(getComputedStyle(cabelo).backgroundImage.slice(5, -2) || `${import.meta.env.BASE_URL}img/cabelo.webp`), img(pente.src)]), tempo(CELULAR() ? 1200 : 2500)]).then(comecar);
 
   function comecar() {
     const W = fixo.clientWidth, H = fixo.clientHeight, u = unidade(W, H);
@@ -128,6 +128,7 @@ export function abertura({ lenis, cena, aoTerminar }) {
     }
 
     const tl = gsap.timeline({ defaults: { ease: 'pf-out' }, onComplete: () => { lenis?.start(); } });
+    if (cel) tl.timeScale(1.6); // no celular, ~2,4 s em vez de ~3,8 s
     tl.addLabel('inicio')
       .fromTo(cabelo, { scale: 1.035 }, { scale: 1, duration: 1.6, ease: 'pf-out' }, 0)
       .fromTo([p1, p2], { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.08 }, 0.05)
