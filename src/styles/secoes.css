@@ -249,6 +249,10 @@
 .horario div.is-hoje dt::after { content: ' · hoje'; }
 .adesivo { display: inline-block; margin-top: calc(38 * var(--su)); padding: 10px 16px; border-radius: 6px; border: 1px dashed rgb(255 255 255 / 0.32); background: #141414; color: #e2e1de; font-weight: 700; transform: rotate(-4deg); box-shadow: 0 10px 20px -12px #000; }
 .mapa { margin: 0; }
+.mapa__link { display: block; border-radius: calc(24 * var(--su)); transition: transform 0.5s var(--curva); }
+@media (hover: hover) { .mapa__link:hover { transform: scale(1.01); } }
+.mapa__link:focus-visible { outline: 2px solid var(--branco); outline-offset: 4px; }
+.endereco__plus { font-size: 13px; letter-spacing: 0.08em; color: var(--cinza-2); }
 .mapa__svg { width: 100%; height: auto; border-radius: calc(24 * var(--su)); background: #0e0e0e; overflow: hidden; }
 .mapa__ruas path { stroke: #1d1d1d; stroke-width: 26; }
 .mapa__ruas path.fina { stroke-width: 12; stroke: #171717; }

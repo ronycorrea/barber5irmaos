@@ -12,92 +12,72 @@ Feito com Vite, Three.js, GSAP e Lenis. Cadeira 3D: "Barber Chair", de sweedboy6
 
 ## Agendamento
 
-O cliente agenda pelo site, e o barbeiro fica sabendo e controla tudo **só pelo WhatsApp**. Não existe painel do barbeiro.
+O cliente agenda pelo site, e o barbeiro fica sabendo e controla tudo **só pelo Telegram**, com um robô (Bot API oficial e gratuita). Não existe painel do barbeiro, e o site não usa a API do WhatsApp: a barbearia não tem CNPJ.
 
 ```
 Site (src/agenda.js) ──► /api/horarios   horários livres de verdade
-                    └──► /api/agendar    grava ──► WhatsApp do barbeiro (com botão "Cancelar este horário")
-                                                └► WhatsApp do cliente (confirmação)
-WhatsApp do barbeiro ──► /api/whatsapp   cancelar · "folga sábado" · "liberar sábado" · "agenda amanhã"
+                    └──► /api/agendar    grava ──► Telegram do barbeiro (com botão "❌ Cancelar este horário")
+Telegram do barbeiro ──► /api/telegram   cancelar · /hoje · /amanha · /folga · /abrir · /start
                               │
                          Supabase (Postgres): agendamentos + folgas
 ```
 
 | Arquivo | O que faz |
 |---|---|
-| `api/_config.js` | **O único arquivo para editar:** barbeiros, WhatsApp de cada um, expediente, serviços, grade de 20 min, prazo de 7 dias |
+| `api/_config.js` | **O único arquivo para editar:** barbeiros, `telegramChatId` de cada um, expediente, serviços, grade de 20 min, prazo de 7 dias |
 | `api/horarios.js` | `GET ?barbeiro=<id\|livre>&data=AAAA-MM-DD&servico=<nome>` → horários livres |
-| `api/agendar.js` | `POST` → valida de novo, grava, avisa no WhatsApp. `409` se o horário foi pego |
-| `api/whatsapp.js` | Webhook da Meta: botão Cancelar e comandos de texto do barbeiro |
-| `api/barbeiros.js` | Lista pública dos barbeiros (sem os números) |
+| `api/agendar.js` | `POST` → valida de novo, grava e avisa o barbeiro. `409` se o horário foi pego |
+| `api/telegram.js` | Webhook do bot: o botão Cancelar e os comandos |
+| `api/barbeiros.js` | A lista pública dos barbeiros (sem os IDs do Telegram) |
 | `supabase/schema.sql` | Tabelas. O banco impede dois agendamentos sobrepostos para o mesmo barbeiro |
+| `scripts/telegram-comandos.mjs` | Registra o menu de comandos do bot (`setMyCommands`) |
 
-Todas as contas de horário usam o fuso de Manaus (UTC-4), não o do servidor.
+Todas as contas de horário usam o fuso de Manaus (UTC-4), não o do servidor. Se o Telegram falhar ou o barbeiro não tiver `telegramChatId`, o agendamento é gravado do mesmo jeito; o erro só fica no log.
 
-### O que o barbeiro pode fazer pelo WhatsApp
+### O que o barbeiro faz pelo Telegram
 
-| Mandar / tocar | Resultado |
+| Comando / botão | Resultado |
 |---|---|
-| Botão **Cancelar este horário** | Cancela, avisa o cliente e o horário volta a ficar livre no site |
-| `folga sábado` · `folga amanhã` · `folga 29/11` | Fecha o dia dele no site (avisa se já tiver cliente marcado) |
-| `liberar sábado` | Desfaz a folga |
-| `agenda` · `agenda amanhã` | Lista os clientes do dia |
-| qualquer outra coisa | Mostra a lista de comandos |
+| Botão **❌ Cancelar este horário** | Cancela (só se o agendamento for dele), a mensagem vira "❌ Cancelado" e o horário volta para o site. O bot manda um link pronto do WhatsApp para ele avisar o cliente |
+| `/hoje` · `/amanha` | Clientes do dia, em ordem de horário |
+| `/folga sabado` · `/folga 29/11` · `/folga amanha` | Fecha o dia dele no site (avisa e lista se já tiver cliente marcado, sem cancelar ninguém) |
+| `/abrir sabado` | Desfaz a folga |
+| `/start` | Qualquer pessoa: mostra o ID do Telegram |
+| qualquer outro texto | Lista os comandos |
 
-Só os números cadastrados em `api/_config.js` podem dar comandos. Se um cliente mandar mensagem para o número do sistema, ele recebe o link do WhatsApp da barbearia (`CONTATO_BARBEARIA`).
+Fora o `/start`, só os IDs cadastrados em `api/_config.js` podem usar o bot. O cliente não recebe mensagem automática, porque o Telegram não manda mensagem para número de telefone: ele vê a confirmação na tela do site.
 
-### 1. Testar no computador (sem Supabase e sem Meta)
+### 1. Testar no computador
 
-`npm run dev` já responde as rotas `/api`. Sem as variáveis de ambiente, a agenda fica **na memória** (some quando o servidor reinicia) e as mensagens de WhatsApp **só aparecem no terminal**. Dá para agendar pelo site e ver o que cada um receberia.
-
-Para simular o barbeiro (o webhook só aceita isso no modo teste):
+`npm run dev` já responde as rotas `/api`. Sem as variáveis de ambiente, a agenda fica **na memória** (some quando o servidor reinicia) e as mensagens do Telegram **só aparecem no terminal**. Para simular o barbeiro no modo teste:
 
 ```bash
-curl -X POST http://localhost:5173/api/whatsapp -H "Content-Type: application/json" \
-  -d '{"entry":[{"changes":[{"value":{"messages":[{"from":"5592991004747","type":"text","text":{"body":"folga amanhã"}}]}}]}]}'
+curl -X POST http://localhost:5173/api/telegram -H "Content-Type: application/json" \
+  -d '{"message":{"chat":{"id":123},"text":"/start"}}'
 ```
 
 ### 2. Banco de dados (Supabase)
 
-1. Crie um projeto em supabase.com (plano gratuito). Na região, escolha **São Paulo**.
-2. **SQL Editor → New query**, cole `supabase/schema.sql` e clique em **Run**.
+1. Crie um projeto em supabase.com (plano gratuito), na região **São Paulo**.
+2. Abra **SQL Editor → New query**, cole `supabase/schema.sql` e clique em **Run**.
 3. Em **Project Settings → API Keys**, copie a **Project URL** e a **secret key** (`sb_secret_...`) ou a antiga `service_role`. **Nunca use a publishable/anon key.**
-4. Copie `.env.example` para `.env.local` e preencha `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`. Reinicie o `npm run dev`.
+4. Coloque `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no `.env.local` (modelo em `.env.example`) e na Vercel.
 
 > Na Vercel, sem o Supabase configurado, a agenda recusa agendar (responde 503). Assim ela nunca roda furada na memória.
 
-### 3. Vercel
+### 3. Criar o bot do Telegram
 
-Em **Settings → Environment Variables**, cadastre as mesmas variáveis do `.env.local` e faça um novo deploy. A pasta `api/` vira funções sozinha.
-
-### 4. WhatsApp (Meta Cloud API)
-
-1. Em developers.facebook.com, crie um app do tipo **Business** e adicione o produto **WhatsApp**. Use um número que **não** esteja no WhatsApp comum.
-2. Copie o **Phone number ID** (`WHATSAPP_PHONE_NUMBER_ID`) e gere um **token permanente** em Business Settings → System users (`WHATSAPP_TOKEN`). O token temporário vence em 24 h.
-3. O **App secret** fica em App settings → Basic (`WHATSAPP_APP_SECRET`).
-4. **Webhook:** WhatsApp → Configuration → URL `https://SEU-SITE.vercel.app/api/whatsapp`. Invente um texto para o **Verify token** e coloque o mesmo em `WHATSAPP_VERIFY_TOKEN`. Assine o campo **messages**.
-5. Crie os 3 modelos abaixo (WhatsApp Manager → Message templates), em **Português (BR)** e na categoria **Utilidade**. Se usar outros nomes, ajuste `WA_TEMPLATE_*`.
-
-**`novo_agendamento_barbeiro`** (para o barbeiro), com um botão de **resposta rápida** chamado `Cancelar este horário`:
-```
-📅 Novo agendamento
-Cliente: {{1}} · {{2}}
-Serviço: {{3}} · R$ {{4}}
-Quando: {{5}}
-```
-
-**`agendamento_confirmado`** (para o cliente):
-```
-Olá, {{1}}! Seu horário na Barbearia 5 Irmãos está confirmado: {{2}} com {{3}}, {{4}}. Pagamento na cadeira. Precisa remarcar? Fale com a gente: {{5}}
-```
-
-**`agendamento_cancelado`** (para o cliente):
-```
-Olá, {{1}}. O barbeiro precisou cancelar seu horário de {{2}} ({{3}}) na Barbearia 5 Irmãos. Desculpe o transtorno! Escolha outro horário em {{4}}
-```
-
-Enquanto os modelos não forem aprovados, o agendamento funciona normalmente, mas as mensagens falham. A falha fica registrada no log da Vercel e não derruba a reserva.
+1. No Telegram, abra o **@BotFather**, mande `/newbot` e escolha um nome e um usuário que termine em `bot` (ex.: `barbearia5irmaos_bot`). Ele entrega o **token**.
+2. Invente um segredo para o webhook: letras, números, `_` e `-` (ex.: `b5i_8f3k2m9q`).
+3. Na Vercel, em **Settings → Environment Variables**, cadastre `TELEGRAM_BOT_TOKEN` e `TELEGRAM_WEBHOOK_SECRET` e faça um **Redeploy**. Coloque as duas também no `.env.local`.
+4. Ative o webhook abrindo no navegador (troque os três pedaços):
+   ```
+   https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://<dominio>/api/telegram&secret_token=<TELEGRAM_WEBHOOK_SECRET>
+   ```
+   Deve aparecer `"ok":true`. Para conferir, abra `https://api.telegram.org/bot<TOKEN>/getWebhookInfo`: a `url` tem que estar certa, e `last_error_message` não pode aparecer.
+5. Registre o menu de comandos (uma vez só): `node --env-file=.env.local scripts/telegram-comandos.mjs`
+6. **Cada barbeiro** abre o bot, manda `/start` e envia para você o ID que o bot responder. Cole o ID no `telegramChatId` dele em `api/_config.js`, faça commit e push.
 
 ### Trocar os dados de teste pelos reais
 
-Edite só `api/_config.js`: nomes, `whatsapp`, `expediente` e `CONTATO_BARBEARIA`. Não troque o `id` de um barbeiro que já tem agendamentos gravados. Se mudar o cardápio no `index.html`, atualize `SERVICOS` com os mesmos nomes, durações e preços.
+Edite só `api/_config.js`: `nome`, `telegramChatId` e `expediente` de cada barbeiro. Não troque o `id` de um barbeiro que já tem agendamentos gravados. Se mudar o cardápio no `index.html`, atualize `SERVICOS` com os mesmos nomes, durações e preços.

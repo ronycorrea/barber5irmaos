@@ -15,20 +15,20 @@ export const ANTECEDENCIA_MIN = 20;
 // Quantos agendamentos futuros um mesmo celular pode ter ao mesmo tempo (contra quem lota a agenda de brincadeira).
 export const MAX_POR_CLIENTE = 2;
 
-// Endereço do site (vai na mensagem de cancelamento, para o cliente remarcar).
+// Endereço do site (vai no aviso de cancelamento que o barbeiro manda ao cliente, para ele remarcar).
 export const SITE_URL = 'https://barbearia5irmaos.vercel.app';
-// WhatsApp para o cliente falar com a barbearia (o número da API só envia avisos e não é lido por ninguém).
-export const CONTATO_BARBEARIA = '5592991004747';
 
 // Barbeiros. `id`: curto, sem espaço e sem acento, e nunca muda depois de entrar no ar (fica gravado nos agendamentos).
-// `whatsapp`: 55 + DDD + número, só dígitos. `expediente`: por dia da semana (0 = domingo … 6 = sábado), a lista
+// `telegramChatId`: o ID do Telegram do barbeiro. Para descobrir: o barbeiro abre o bot no Telegram, manda /start
+// e o bot responde com o ID. Vazio = o barbeiro não recebe os avisos (o agendamento funciona do mesmo jeito).
+// `expediente`: por dia da semana (0 = domingo … 6 = sábado), a lista
 // de turnos ['entrada', 'saída']. O almoço é o buraco entre dois turnos. Dia que não aparece = folga fixa.
 export const BARBEIROS = [
   {
     id: 'barbeiro1',
     nome: 'Barbeiro 1', // ⚠ trocar pelo nome real
     extra: 'seg a sex · 9h às 18h',
-    whatsapp: '5592991004747', // ⚠ número de teste
+    telegramChatId: '', // ⚠ colar aqui o ID que o bot mostrar no /start
     expediente: {
       1: [['09:00', '12:00'], ['13:00', '18:00']],
       2: [['09:00', '12:00'], ['13:00', '18:00']],
@@ -41,7 +41,7 @@ export const BARBEIROS = [
     id: 'barbeiro2',
     nome: 'Barbeiro 2', // ⚠ trocar pelo nome real
     extra: 'ter a sáb · 12h às 21h',
-    whatsapp: '5592991004747', // mesmo número: é teste
+    telegramChatId: '', // no teste, o mesmo ID do Barbeiro 1
     expediente: {
       2: [['12:00', '21:00']],
       3: [['12:00', '21:00']],

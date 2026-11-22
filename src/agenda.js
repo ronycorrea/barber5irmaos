@@ -1,6 +1,6 @@
 // O agendamento: gaveta à direita em quatro passos (serviço, barbeiro, horário, dados) e a confirmação.
 // Os serviços saem do cardápio do HTML; os barbeiros, os horários livres e a reserva vêm da API (/api, ver api/_config.js).
-// Nada é cobrado: ao confirmar, a reserva é gravada e o barbeiro e o cliente recebem o aviso no WhatsApp.
+// Nada é cobrado: ao confirmar, a reserva é gravada e o barbeiro recebe o aviso no Telegram.
 import gsap from 'gsap';
 import { HORARIO, agora } from './secoes/horario.js';
 
@@ -257,7 +257,7 @@ export function agenda({ lenis }) {
     campo('fone', 'Celular com WhatsApp', 'type="tel" inputmode="numeric" autocomplete="tel" placeholder="(00) 00000-0000"', s.fone, fone);
     const aviso = document.createElement('p');
     aviso.className = 'aviso-agenda';
-    aviso.innerHTML = '<strong>Nada é cobrado agora.</strong> Você paga na cadeira, depois do corte. Ao confirmar, você recebe a confirmação no seu WhatsApp.';
+    aviso.innerHTML = '<strong>Nada é cobrado agora.</strong> Você paga na cadeira, depois do corte. Ao confirmar, o horário fica reservado e o barbeiro recebe o aviso na hora.';
     aviso.dataset.aviso = '';
     corpo.append(aviso);
   }
@@ -270,7 +270,7 @@ export function agenda({ lenis }) {
 
   function marca(i) { corpo.querySelectorAll('.opcao').forEach((b, k) => { b.classList.toggle('is-on', k === i); b.setAttribute('aria-pressed', String(k === i)); }); }
 
-  /* ---------- confirmar: grava a reserva (a API avisa o barbeiro e o cliente no WhatsApp) ---------- */
+  /* ---------- confirmar: grava a reserva (a API avisa o barbeiro no Telegram) ---------- */
   async function paga() {
     seguir.disabled = true;
     seguir.classList.add('is-pagando');
@@ -307,7 +307,7 @@ export function agenda({ lenis }) {
         <div><dt class="mono">Quando</dt><dd>${dataLonga(quando)}, ${fmtHora(s.hora)}</dd></div>
         <div><dt class="mono">Valor</dt><dd>R$ ${sv.preco} · pago na cadeira</dd></div>
       </dl>
-      <p class="confirma__msg">Você vai receber a confirmação no WhatsApp ${s.fone}. Se não puder vir, avise a barbearia pelo WhatsApp para liberar o horário.</p>
+      <p class="confirma__msg">Seu horário está reservado e o barbeiro já foi avisado. Se precisar falar com você, ele chama no WhatsApp ${s.fone}. Se não puder vir, avise a barbearia para liberar o horário.</p>
       <div class="confirma__botoes">
         <button class="botao botao--claro botao--pequeno" type="button" data-ics>Adicionar à agenda</button>
       </div>

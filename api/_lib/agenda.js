@@ -50,9 +50,3 @@ export function normalizaFone(fone) {
   if (d.length === 10 || d.length === 11) d = `55${d}`;
   return /^55\d{10,11}$/.test(d) ? d : null;
 }
-
-// O WhatsApp às vezes manda o número brasileiro sem o 9 extra do celular (5592 9 9100-4747 → 5592 9100-4747).
-// Compara as duas formas.
-const sem9 = (n) => (n.length === 13 && n.startsWith('55') && n[4] === '9' ? n.slice(0, 4) + n.slice(5) : n);
-export const mesmoNumero = (a, b) => !!a && !!b && sem9(String(a).replace(/\D/g, '')) === sem9(String(b).replace(/\D/g, ''));
-export const barbeirosDoNumero = (numero) => BARBEIROS.filter((b) => mesmoNumero(b.whatsapp, numero));
