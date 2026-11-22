@@ -45,6 +45,7 @@
     </a>
     <nav class="nav__links" aria-label="Seções">
       <a href="#cardapio">Serviços</a>
+      <a href="#barbeiros">Barbeiros</a>
       <a href="#cortes">Cortes</a>
       <a href="#endereco">Endereço</a>
     </nav>
@@ -173,10 +174,45 @@
       </div>
     </section>
 
-    <!-- #2 CORTES: fotos de verdade da casa; filtro por estilo (FLIP) e a lupa que segue o cursor (src/secoes/lupa.js) -->
+    <!-- #2 BARBEIROS: dois espelhos; o escolhido abre e acende, e rolando a luz passa de um para o outro.
+         A ordem e os nomes têm que bater com BARBEIROS em api/_config.js (data-com="0" = o primeiro de lá). -->
+    <section class="espelhos secao secao--escura" id="barbeiros" aria-labelledby="espelhos-titulo">
+      <div class="espelhos__fixo">
+        <div class="secao__miolo">
+          <p class="rotulo mono">#2 · Os barbeiros</p>
+          <h2 class="titulo titulo--duas" id="espelhos-titulo" data-titulo><span class="leve">Escolha quem</span> <span class="forte">vai te atender.</span></h2>
+          <div class="espelhos__fila" role="tablist" aria-label="Barbeiros">
+          <article class="espelho is-ativo" role="tab" tabindex="0" aria-selected="true">
+            <span class="espelho__luminaria" aria-hidden="true"><i></i></span>
+            <!-- [foto do barbeiro]: troque o <svg> por <img src="/img/barbeiros/barbeiro-1.webp" alt="Barbeiro 1"> -->
+            <div class="espelho__vidro"><svg class="espelho__marca" viewBox="0 0 48 20" aria-hidden="true"><use href="#marca"/></svg></div>
+            <div class="espelho__info">
+              <span class="espelho__num">#1</span>
+              <strong class="espelho__nome">Barbeiro 1</strong>
+              <span class="espelho__extra mono">seg a sex · 9h às 18h</span>
+              <button class="espelho__agendar mono" type="button" data-agendar data-com="0">Agendar com ele</button>
+            </div>
+          </article>
+          <article class="espelho" role="tab" tabindex="0" aria-selected="false">
+            <span class="espelho__luminaria" aria-hidden="true"><i></i></span>
+            <!-- [foto do barbeiro]: troque o <svg> por <img src="/img/barbeiros/barbeiro-2.webp" alt="Barbeiro 2"> -->
+            <div class="espelho__vidro"><svg class="espelho__marca" viewBox="0 0 48 20" aria-hidden="true"><use href="#marca"/></svg></div>
+            <div class="espelho__info">
+              <span class="espelho__num">#2</span>
+              <strong class="espelho__nome">Barbeiro 2</strong>
+              <span class="espelho__extra mono">ter a sáb · 12h às 21h</span>
+              <button class="espelho__agendar mono" type="button" data-agendar data-com="1">Agendar com ele</button>
+            </div>
+          </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- #3 CORTES: fotos de verdade da casa; filtro por estilo (FLIP) e a lupa que segue o cursor (src/secoes/lupa.js) -->
     <section class="cortes secao secao--escura" id="cortes" aria-labelledby="cortes-titulo">
       <div class="secao__miolo">
-        <p class="rotulo mono">#2 · Cortes da casa</p>
+        <p class="rotulo mono">#3 · Cortes da casa</p>
         <h2 class="titulo" id="cortes-titulo" data-titulo><span class="leve">Feito aqui,</span> <span class="forte">na nossa cadeira.</span></h2>
         <p class="secao__texto">Degradê, luzes, risco e desenho. Passe o mouse na foto (ou toque, no celular) e use a lupa para ver cada detalhe do acabamento.</p>
         <div class="filtros" role="group" aria-label="Filtrar cortes por estilo">
@@ -236,11 +272,11 @@
     <!-- Seções da demo desligadas até a barbearia ter os dados (planos, produtos, vale-presente, avaliações do Google).
          Para religar, copie a seção do arquivos/index.html, troque os textos e os preços, e volte os links da nav. -->
 
-    <!-- #3 ONDE FICA: endereço, horário (hoje marcado) e o mapa do Google -->
+    <!-- #4 ONDE FICA: endereço, horário (hoje marcado) e o mapa do Google -->
     <section class="endereco secao secao--escura" id="endereco" aria-labelledby="endereco-titulo">
       <div class="secao__miolo endereco__miolo">
         <div class="endereco__texto">
-          <p class="rotulo mono">#3 · Onde fica</p>
+          <p class="rotulo mono">#4 · Onde fica</p>
           <h2 class="titulo titulo--duas" id="endereco-titulo" data-titulo><span class="leve">Passa aqui</span> <span class="forte">na cadeira.</span></h2>
           <address class="endereco__lugar">Bairro Santa Efigênia<br>Coari – AM<br><span class="endereco__plus mono">Plus Code WV34+JX</span><br><a href="https://maps.app.goo.gl/nS1yFnoue2X9XLkD6" class="endereco__fone" target="_blank" rel="noopener">Como chegar ↗</a></address>
           <dl class="horario mono">
@@ -286,10 +322,12 @@
     <p class="rodape__nome" aria-hidden="true"><span>cinco</span> <span>irmãos</span></p>
     <div class="rodape__pe">
       <nav class="rodape__links" aria-label="Rodapé">
-        <a href="#cardapio">Serviços</a><a href="#cortes">Cortes</a><a href="#endereco">Endereço</a>
+        <a href="#cardapio">Serviços</a><a href="#barbeiros">Barbeiros</a><a href="#cortes">Cortes</a><a href="#endereco">Endereço</a>
       </nav>
-      <p class="rodape__nota mono">Barbearia 5 Irmãos · Barba, cabelo e atitude · Cadeira 3D: “Barber Chair”, de sweedboy69 (CC BY 4.0)</p>
+      <p class="rodape__nota mono">Barbearia 5 Irmãos · Barba, cabelo e atitude<br>© 2026 Barbearia 5 Irmãos. Todos os direitos reservados.</p>
     </div>
+    <!-- crédito exigido pela licença CC BY 4.0 do modelo 3D da cadeira: não remover enquanto a cadeira estiver no site -->
+    <p class="rodape__credito">Modelo 3D da cadeira: <a href="https://sketchfab.com/3d-models/barber-chair-b608436ca02d40c6a914fca72f7b3619" target="_blank" rel="noopener">“Barber Chair”</a>, de <a href="https://sketchfab.com/sweedboy69" target="_blank" rel="noopener">sweedboy69</a>, sob <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
   </footer>
 
   <!-- AGENDAMENTO: gaveta em quatro passos; o conteúdo é montado pelo src/agenda.js -->
